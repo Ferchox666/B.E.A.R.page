@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BEAR - Portal de Guardia Móvil</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        forest: {
+                            DEFAULT: '#16300d',
+                            50: '#e8f5e3',
+                            100: '#c8e3be',
+                            200: '#a4cf94',
+                            300: '#7cba65',
+                            400: '#5ca83f',
+                            500: '#3d961c',
+                            600: '#2d7a14',
+                            700: '#1f5e0e',
+                            800: '#16300d',
+                            900: '#0d1f08',
+                        },
+                        mustard: {
+                            DEFAULT: '#bdad00',
+                            50: '#f9f6d6',
+                            100: '#f0e99e',
+                            200: '#e6db65',
+                            300: '#dccf2d',
+                            400: '#bdad00',
+                            500: '#a69800',
+                            600: '#8f8300',
+                            700: '#786e00',
+                            800: '#615900',
+                            900: '#4a4400',
+                        },
+                        bear: {
+                            gold: {
+                                50: '#fdf9eb',
+                                100: '#fbf0cc',
+                                200: '#f7df97',
+                                300: '#f1c85a',
+                                400: '#eab42f',
+                                500: '#d4af37',
+                                600: '#bd891c',
+                                700: '#986214',
+                                800: '#7c4c15',
+                                900: '#663d16',
+                                950: '#3b1f09',
+                            },
+                            olive: {
+                                50: '#f5f6f2',
+                                100: '#e6e9de',
+                                200: '#d0d7bf',
+                                300: '#afbc96',
+                                400: '#8c9d6f',
+                                500: '#6b7f50',
+                                600: '#53643c',
+                                700: '#404f2f',
+                                800: '#344027',
+                                900: '#2d3723',
+                                950: '#171e10',
+                            },
+                            bg: '#1b261a',
+                            contenedor: '#e2ebd5',
+                            textoClaro: '#f4f7f0',
+                            textoOscuro: '#111c10',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom CSS Styles -->
+    <style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        /* 3D Card flip for Flashcards */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Bear Gold glow effect for white capsules on forest bg */
+        .glow-bear {
+            box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(189, 173, 0, 0.15);
+        }
+
+        /* View transitions */
+        .app-view {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-[#16300d] text-slate-100 min-h-full font-sans antialiased flex items-center justify-center p-4 relative overflow-y-auto">
+
+    <!-- Background blurry accents -->
+    <div
+        class="fixed top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 bg-mustard/10 rounded-full blur-[100px] pointer-events-none z-0">
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER (Centered for Mobile) -->
+    <div id="toast-container"
+        class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-sm w-[90%] pointer-events-none">
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MAIN WRAPPER (Centrado en Pantalla)       -->
+    <!-- ========================================== -->
+    <div class="w-full max-w-md md:max-w-lg z-10 my-auto">
+
+        <!-- ========================================== -->
+        <!-- VISTA 1: INICIO DE SESIÓN                  -->
+        <!-- ========================================== -->
+        <div id="view-login"
+            class="app-view bg-bear-bg border border-bear-olive-700 p-6 md:p-8 rounded-3xl shadow-2xl relative glow-bear">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-block mb-5">
+                    <div
+                        class="bg-bear-bg rounded-full overflow-hidden w-36 h-36 flex items-center justify-center border border-bear-olive-700 shadow-sm">
+                        <img src="bear_logo.png" alt="BEAR Logo" class="w-full h-full object-cover rounded-full"
+                            onerror="this.src='https://placehold.co/144x144/1e293b/f43f5e?text=BEAR'">
+                    </div>
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight text-bear-textoClaro">f.v.B.E.A.R.</h1>
+                <p class="text-[10px] text-mustard uppercase tracking-widest font-extrabold mt-0.5">Bomberos
+                    Voluntarios</p>
+            </div>
+
+            <!-- Form -->
+            <form onsubmit="handleLogin(event)" class="space-y-5">
+                <div class="space-y-1.5">
+                    <label for="login-email"
+                        class="text-[10px] font-bold tracking-wider uppercase text-bear-textoClaro">Usuario / Correo</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-bear-textoOscuro/50">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                        </span>
+                        <input type="email" id="login-email" required placeholder="correo@bear.org"
+                            class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-2xl py-3 pl-10 pr-4 text-sm text-bear-textoOscuro placeholder-bear-textoOscuro/40 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="login-password"
+                        class="text-[10px] font-bold tracking-wider uppercase text-bear-textoClaro">Contraseña</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-bear-textoOscuro/50">
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                        </span>
+                        <input type="password" id="login-password" required placeholder="••••••••"
+                            class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-2xl py-3 pl-10 pr-4 text-sm text-bear-textoOscuro placeholder-bear-textoOscuro/40 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all">
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-login-submit"
+                    class="w-full bg-bear-olive-500 hover:bg-bear-olive-600 text-white font-bold py-3.5 px-6 rounded-2xl transition-all duration-300 transform active:scale-[0.98] flex items-center justify-center gap-2 text-sm shadow-lg border-2 border-bear-olive-700">
+                    <span>Ingresar</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </form>
+
+                <p class="text-[9px] text-center text-bear-textoClaro/50 mt-6 uppercase tracking-wider">Acceso de Simulación
+                Operativo (Local)</p>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VISTA 2: MENÚ PRINCIPAL (CÁPSULA CENTRAL)  -->
+        <!-- ========================================== -->
+        <div id="view-menu"
+            class="app-view hidden bg-bear-bg border border-bear-olive-700 p-6 md:p-8 rounded-3xl shadow-2xl relative glow-bear text-center">
+
+            <!-- Logo & Title -->
+            <div class="mb-6 flex flex-col items-center">
+                <div
+                    class="w-28 h-28 rounded-full border border-bear-olive-700 p-0.5 overflow-hidden bg-bear-bg shadow-lg mb-3">
+                    <img src="bear_logo.png" alt="BEAR Logo" class="w-full h-full object-cover rounded-full"
+                        onerror="this.src='https://placehold.co/112x112/1e293b/f43f5e?text=BEAR'">
+                </div>
+                <h2 class="font-extrabold text-xl tracking-tight text-bear-textoClaro">Cuerpo de Bomberos f.v.B.E.A.R.</h2>
+            </div>
+
+            <!-- Dynamic Clock Panel -->
+            <div
+                class="bg-bear-olive-500 border-2 border-bear-olive-700 px-4 py-2.5 rounded-2xl mb-6 flex items-center justify-center gap-2 text-xs font-mono text-white shadow-md">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-white/70 animate-pulse"></i>
+                <span id="menu-live-clock">Cargando hora...</span>
+            </div>
+
+            <!-- Menu buttons -->
+            <div class="space-y-3">
+                <button onclick="showView('form')"
+                    class="w-full py-4 px-5 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold flex items-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-md">
+                    <i data-lucide="file-pen-line" class="w-5 h-5 text-white/80 shrink-0"></i>
+                    <div class="text-left">
+                        <span class="block text-sm">Registrar Guardia</span>
+                        <span class="block text-[9px] text-white/70 font-normal">Digitalizar hoja del turno actual</span>
+                    </div>
+                </button>
+
+                <button onclick="showView('history')"
+                    class="w-full py-4 px-5 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold flex items-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-md">
+                    <i data-lucide="folder-clock" class="w-5 h-5 text-white/80 shrink-0"></i>
+                    <div class="text-left">
+                        <span class="block text-sm">Historial de Guardias</span>
+                        <span class="block text-[9px] text-white/70 font-normal">Consulta de registros hist&oacute;ricos</span>
+                    </div>
+                </button>
+
+                <button onclick="showView('checklist')"
+                    class="w-full py-4 px-5 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold flex items-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-md">
+                    <i data-lucide="backpack" class="w-5 h-5 text-white/80 shrink-0"></i>
+                    <div class="text-left">
+                        <span class="block text-sm">Control de Inventario y Mochila</span>
+                        <span class="block text-[9px] text-white/70 font-normal">Control de inventario y equipo operativo</span>
+                    </div>
+                </button>
+
+                <button onclick="showView('qap')"
+                    class="w-full py-4 px-5 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold flex items-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-md">
+                    <i data-lucide="shield" class="w-5 h-5 text-white/80 shrink-0"></i>
+                    <div class="text-left">
+                        <span class="block text-sm">Documentos de la Instituci&oacute;n</span>
+                        <span class="block text-[9px] text-white/70 font-normal">M&oacute;dulo de estudio y biblioteca</span>
+                    </div>
+                </button>
+
+                <button onclick="handleLogout()"
+                    class="w-full py-4 px-5 bg-transparent text-red-400 border-2 border-red-500/30 hover:bg-red-950/40 active:bg-red-950/70 rounded-2xl font-bold flex items-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-md">
+                    <i data-lucide="log-out" class="w-5 h-5 text-red-400/80 shrink-0"></i>
+                    <div class="text-left">
+                        <span class="block text-sm font-bold">Cerrar Sesi&oacute;n</span>
+                        <span class="block text-[9px] text-red-400/60 font-normal">Salir del portal operativo</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VISTA 3: REGISTRAR GUARDIA                 -->
+        <!-- ========================================== -->
+        <div id="view-form"
+            class="app-view hidden bg-bear-bg border border-bear-olive-700 p-5 md:p-6 rounded-3xl shadow-2xl relative glow-bear flex flex-col">
+
+            <!-- Top Navigation / Header -->
+            <div class="flex items-center justify-between border-b border-bear-olive-700 pb-3 mb-5">
+                <button onclick="showView('menu')"
+                    class="flex items-center gap-1.5 text-xs text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md">
+                    <span>Volver al Menú</span>
+                </button>
+                <button type="button" onclick="fillDemoData()"
+                    class="text-[10px] text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 px-2.5 py-1.5 rounded-xl transition-all font-bold shadow-md">
+                    <span>Demo</span>
+                </button>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-2xl font-bold text-bear-textoClaro mb-4">
+                    <span>Hoja de Guardia</span>
+                </h3>
+                <p class="text-xs text-bear-textoClaro/70 mt-0.5">Ingresa los datos para registrar en el almacenamiento
+                    local.</p>
+            </div>
+
+            <!-- Form -->
+            <form id="guard-form" onsubmit="saveGuardRecord(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Fecha -->
+                    <div class="space-y-1">
+                        <label for="guard-date"
+                            class="text-xs font-bold uppercase tracking-wider text-bear-textoClaro">Fecha</label>
+                        <input type="date" id="guard-date" required
+                            class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-3 text-xs text-bear-textoOscuro focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all font-mono">
+                    </div>
+
+                    <!-- Horarios -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="space-y-1">
+                            <label for="guard-start-time"
+                                class="text-xs font-bold uppercase tracking-wider text-bear-textoClaro">H. Inicio</label>
+                            <input type="time" id="guard-start-time" required
+                                class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-2 text-xs text-bear-textoOscuro focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all font-mono">
+                        </div>
+                        <div class="space-y-1">
+                            <label for="guard-end-time"
+                                class="text-xs font-bold uppercase tracking-wider text-bear-textoClaro">H. Fin</label>
+                            <input type="time" id="guard-end-time" required
+                                class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-2 text-xs text-bear-textoOscuro focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all font-mono">
+                        </div>
+                    </div>
+
+                    <!-- Jefe de Guardia -->
+                    <div class="space-y-1">
+                        <label for="guard-boss"
+                            class="text-xs font-bold uppercase tracking-wider text-bear-textoClaro">Jefe de
+                            Guardia</label>
+                        <div class="relative">
+                            <input type="text" id="guard-boss" required autocomplete="off" placeholder="Buscar oficial..."
+                                class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-3 text-xs text-bear-textoOscuro placeholder-bear-textoOscuro/40 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all">
+                            <div id="guard-boss-list" class="hidden absolute z-20 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-bear-bg border border-bear-olive-600 rounded-xl shadow-xl"></div>
+                        </div>
+                    </div>
+
+                    <!-- Jefe de Seguridad -->
+                    <div class="space-y-1">
+                        <label for="guard-safety-boss"
+                            class="text-xs font-bold uppercase tracking-wider text-bear-textoClaro">Jefe de
+                            Seguridad</label>
+                        <div class="relative">
+                            <input type="text" id="guard-safety-boss" required autocomplete="off" placeholder="Buscar encargado..."
+                                class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-3 text-xs text-bear-textoOscuro placeholder-bear-textoOscuro/40 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all">
+                            <div id="guard-safety-boss-list" class="hidden absolute z-20 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-bear-bg border border-bear-olive-600 rounded-xl shadow-xl"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jefe de Comunicaciones -->
+                <div class="space-y-1">
+                    <label for="guard-comms-boss"
+                        class="text-xs font-bold uppercase tracking-wider text-bear-textoClaro">Jefe de
+                        Comunicaciones</label>
+                    <div class="relative">
+                        <input type="text" id="guard-comms-boss" required autocomplete="off" placeholder="Buscar operador..."
+                            class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-3 text-xs text-bear-textoOscuro placeholder-bear-textoOscuro/40 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all">
+                        <div id="guard-comms-boss-list" class="hidden absolute z-20 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-bear-bg border border-bear-olive-600 rounded-xl shadow-xl"></div>
+                    </div>
+                </div>
+
+                <!-- Personal de Guardia -->
+                <div class="space-y-1">
+                    <label for="guard-crew"
+                        class="text-xs font-bold uppercase tracking-wider text-bear-textoClaro">Personal de
+                        Guardia</label>
+                    <div class="relative">
+                        <textarea id="guard-crew" rows="2" required
+                            placeholder="Ej: Bombero Carlos Pérez&#10;Bombero Tomás Martínez"
+                            class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-3 text-xs text-bear-textoOscuro placeholder-bear-textoOscuro/40 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all font-sans"></textarea>
+                        <div id="guard-crew-list" class="hidden absolute z-20 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-bear-bg border border-bear-olive-600 rounded-xl shadow-xl"></div>
+                    </div>
+                </div>
+
+                <!-- Novedades / Comentarios -->
+                <div class="space-y-1">
+                    <label for="guard-incidents"
+                        class="text-xs font-bold uppercase tracking-wider text-bear-textoClaro">Novedades y
+                        Comentarios</label>
+                    <textarea id="guard-incidents" rows="3" required
+                        placeholder="Detalles de salidas de unidades, inspecciones de equipos o incidentes..."
+                        class="w-full bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-3 text-xs text-bear-textoOscuro placeholder-bear-textoOscuro/40 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all font-sans"></textarea>
+                </div>
+
+                <!-- Action Button -->
+                <button type="submit" id="btn-guard-submit"
+                    class="w-full bg-bear-olive-500 hover:bg-bear-olive-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 transform active:scale-[0.98] text-sm shadow-md mt-4 border-2 border-bear-olive-700">
+                    <span id="btn-guard-label">Guardar Registro</span>
+                </button>
+
+                <!-- Delete button (hidden by default, shown only during edit) -->
+                <button type="button" id="btn-delete-guard"
+                    onclick="deleteGuardFromEdit()"
+                    class="hidden w-full bg-rose-900/60 hover:bg-rose-800/70 text-rose-200 font-bold py-3 px-6 rounded-2xl transition-all duration-300 transform active:scale-[0.98] text-sm shadow-md mt-3 border-2 border-rose-700/60">
+                    <span>Eliminar Guardia</span>
+                </button>
+            </form>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VISTA 4: DOCUMENTOS Y CÓDIGOS QAP         -->
+        <!-- ========================================== -->
+        <div id="view-qap"
+            class="app-view hidden bg-bear-bg border border-bear-olive-700 p-5 md:p-6 rounded-3xl shadow-2xl relative glow-bear flex flex-col max-w-full md:max-w-xl">
+
+            <!-- ========================================== -->
+            <!-- SUB-VISTA A: ÍNDICE DE DOCUMENTOS (TARJETAS) -->
+            <!-- ========================================== -->
+            <div id="qap-index">
+
+                <!-- Top Navigation / Header -->
+                <div class="flex items-center justify-between border-b border-bear-olive-700 pb-3 mb-5">
+                    <button onclick="showView('menu')"
+                        class="flex items-center gap-1.5 text-xs text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md">
+                        <span>Volver al Menú Principal</span>
+                    </button>
+                </div>
+
+                <!-- Título -->
+                <div class="mb-5">
+                    <h3 class="text-lg font-bold text-bear-olive-100 flex items-center gap-2">
+                        <span>Documentos y Material de Estudio</span>
+                    </h3>
+                    <p class="text-[10px] text-bear-olive-400 mt-0.5">Seleccioná un módulo para acceder a su contenido.</p>
+                </div>
+
+                <!-- Listado Vertical de Tarjetas -->
+                <div class="space-y-3">
+
+                    <!-- TARJETA ACTIVA: Códigos QAP -->
+                    <div onclick="openQapModule()"
+                        class="w-full p-4 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                        <div class="text-left">
+                            <span class="block text-sm">Consulta Rápida: Códigos QAP</span>
+                            <span class="block text-[9px] text-white/70 font-normal mt-0.5">Referencia completa de
+                                claves radiales</span>
+                        </div>
+                    </div>
+
+                    <!-- TARJETA ACTIVA: Nudos Operativos -->
+                    <div onclick="openNudosModule()"
+                        class="w-full p-4 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                        <div class="text-left">
+                            <span class="block text-sm">Módulo de Estudio: Nudos Operativos</span>
+                            <span class="block text-[9px] text-white/70 font-normal mt-0.5">Guía visual de nudos de
+                                rescate y seguridad</span>
+                        </div>
+                    </div>
+
+                    <!-- TARJETA ACTIVA: Ley del Voluntariado (Ley N° 3314) -->
+                    <div onclick="openLeyViewer()"
+                        class="w-full p-4 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                        <div class="text-left">
+                            <span class="block text-sm">Ley del Voluntariado (Ley N° 3314)</span>
+                            <span class="block text-[9px] text-white/70 font-normal mt-0.5">Marco legal, derechos y obligaciones de los voluntarios en Bolivia</span>
+                        </div>
+                    </div>
+
+                    <!-- TARJETA PLACEHOLDER: Mangueras y Presiones -->
+                    <div
+                        class="w-full p-4 bg-bear-olive-500/50 border-2 border-bear-olive-700/50 text-white/50 rounded-2xl opacity-50 cursor-not-allowed select-none">
+                        <div class="text-left">
+                            <span class="block text-sm">Manual de Mangueras y Presiones</span>
+                            <span class="block text-[9px] text-white/40 font-normal mt-0.5">Próximamente</span>
+                        </div>
+                        <span
+                            class="text-[8px] uppercase tracking-wider text-white/60 bg-bear-olive-700 px-2 py-0.5 rounded-full shrink-0 font-bold">Pronto</span>
+                    </div>
+
+                    <!-- TARJETA PLACEHOLDER: Primeros Auxilios -->
+                    <div
+                        class="w-full p-4 bg-bear-olive-500/50 border-2 border-bear-olive-700/50 text-white/50 rounded-2xl opacity-50 cursor-not-allowed select-none">
+                        <div class="text-left">
+                            <span class="block text-sm">Primeros Auxilios Básicos</span>
+                            <span class="block text-[9px] text-white/40 font-normal mt-0.5">Próximamente</span>
+                        </div>
+                        <span
+                            class="text-[8px] uppercase tracking-wider text-white/60 bg-bear-olive-700 px-2 py-0.5 rounded-full shrink-0 font-bold">Pronto</span>
+                    </div>
+
+                    <!-- TARJETA PLACEHOLDER: Protocolos de Emergencia -->
+                    <div
+                        class="w-full p-4 bg-bear-olive-500/50 border-2 border-bear-olive-700/50 text-white/50 rounded-2xl opacity-50 cursor-not-allowed select-none">
+                        <div class="text-left">
+                            <span class="block text-sm">Protocolos de Emergencia</span>
+                            <span class="block text-[9px] text-white/40 font-normal mt-0.5">Próximamente</span>
+                        </div>
+                        <span
+                            class="text-[8px] uppercase tracking-wider text-white/60 bg-bear-olive-700 px-2 py-0.5 rounded-full shrink-0 font-bold">Pronto</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SUB-VISTA B: MÓDULO QAP (CONSULTA DIRECTA) -->
+            <!-- ========================================== -->
+            <div id="qap-module" class="hidden flex flex-col flex-1 min-h-0">
+
+                <!-- Top Navigation -->
+                <div class="flex items-center justify-between border-b border-bear-olive-700 pb-3 mb-4 shrink-0">
+                    <div class="flex items-center gap-2">
+                        <button onclick="closeQapModule()"
+                            class="flex items-center gap-1.5 text-xs text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md">
+                            <span>Volver a Documentos</span>
+                        </button>
+                    </div>
+                    <button onclick="showView('menu')"
+                        class="text-[10px] text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md flex items-center gap-1">
+                        <span>Menú</span>
+                    </button>
+                </div>
+
+                <!-- Title -->
+                <div class="mb-4 shrink-0">
+                    <h3 class="text-2xl font-bold text-bear-textoClaro mb-4">
+                        <span>Códigos QAP</span>
+                    </h3>
+                    <p class="text-xs text-bear-textoClaro/70 mt-0.5">Guía de referencia rápida de claves radiales.</p>
+                </div>
+
+                <!-- Search bar -->
+                <div class="relative mb-4 shrink-0">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-bear-olive-400 pointer-events-none">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="qap-search" oninput="filterQapCodes()" placeholder="Filtrar código o significado..."
+                        class="w-full bg-bear-olive-800/60 border-2 border-bear-olive-700 rounded-xl py-2.5 pl-9 pr-8 text-sm text-bear-olive-100 placeholder-bear-olive-500 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all">
+                    <button onclick="clearQapSearch()" id="btn-clear-search"
+                        class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-bear-olive-400 hover:text-bear-olive-200">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Code List (scrollable) -->
+                <div class="flex-1 overflow-y-auto min-h-0 space-y-2 pr-1">
+                    <div id="qap-mobile-list" class="space-y-2">
+                        <!-- Dynamic items rendered by JS -->
+                    </div>
+                    <div id="qap-no-results" class="hidden p-8 text-center text-bear-olive-500 text-xs">
+                        <i data-lucide="alert-circle" class="w-6 h-6 mx-auto mb-1.5 text-bear-olive-400"></i>
+                        <p>No se encontraron resultados.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-VISTA C: MÓDULO DE NUDOS OPERATIVOS     -->
+        <!-- ========================================== -->
+        <div id="nudos-module" class="hidden space-y-5">
+
+            <!-- Top Navigation / Header -->
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <button onclick="closeNudosModule()"
+                    class="flex items-center gap-1.5 text-xs text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md">
+                    <span>Volver a Documentos</span>
+                </button>
+                <button onclick="showView('menu')"
+                    class="text-[10px] text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md flex items-center gap-1">
+                    <span>Menú</span>
+                </button>
+            </div>
+
+            <!-- ==================== -->
+            <!-- LISTA DE NUDOS      -->
+            <!-- ==================== -->
+            <div id="nudos-list-view">
+
+                <!-- Título -->
+                <div>
+                    <h3 class="text-2xl font-bold text-bear-textoClaro mb-4">
+                        <span>Nudos Operativos</span>
+                    </h3>
+                    <p class="text-xs text-bear-textoClaro/70 mt-0.5">Seleccioná un nudo para ver su animación e
+                        instrucciones.</p>
+                </div>
+
+                <!-- Contenedor dinámico -->
+                <div id="nudos-list-container" class="space-y-3"></div>
+
+                <!-- Estados -->
+                <div id="nudos-list-loading" class="py-12 text-center text-bear-textoClaro/70 text-xs">
+                    <i data-lucide="loader" class="w-6 h-6 mx-auto mb-2 text-bear-textoClaro/50 animate-spin"></i>
+                    <p>Cargando nudos...</p>
+                </div>
+                <div id="nudos-list-empty" class="hidden py-12 text-center text-bear-textoClaro/70 text-xs">
+                    <i data-lucide="alert-circle" class="w-6 h-6 mx-auto mb-1.5 text-bear-textoClaro/50"></i>
+                    <p>No se encontraron nudos disponibles.</p>
+                </div>
+
+            </div>
+
+            <!-- ==================== -->
+            <!-- DETALLE DEL NUDO     -->
+            <!-- ==================== -->
+            <div id="nudos-detail-view" class="hidden space-y-4">
+
+                <!-- Botón de retorno -->
+                <button onclick="backToNudosList()"
+                    class="w-full py-3 px-4 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all duration-300 transform active:scale-[0.98] shadow-md text-sm">
+                    <span>Volver a Lista de Nudos</span>
+                </button>
+
+                <!-- Título del nudo -->
+                <h3 id="nudo-detail-title" class="text-2xl font-bold text-bear-textoClaro">
+                    <span></span>
+                </h3>
+
+                <!-- Selector de animación (tabs) -->
+                <div
+                    class="grid grid-cols-2 gap-2 p-1 bg-bear-olive-500 rounded-2xl border-2 border-bear-olive-700 text-center text-xs font-bold">
+                    <button onclick="switchNudoTab('armado')" id="nudo-tab-armado"
+                        class="py-2.5 px-3 rounded-xl bg-white text-bear-olive-700 transition-all shadow-sm font-bold">
+                        Ver Cómo se Hace
+                    </button>
+                    <button onclick="switchNudoTab('vista_360')" id="nudo-tab-vista_360"
+                        class="py-2.5 px-3 rounded-xl text-white/80 transition-all font-bold">
+                        Vista 360°
+                    </button>
+                </div>
+
+                <!-- Contenedor visual -->
+                <div
+                    class="overflow-hidden rounded-2xl bg-bear-olive-100 border-2 border-bear-olive-200 shadow-inner flex items-center justify-center">
+                    <img id="nudo-detail-image" src="" alt="Animación del nudo"
+                        class="w-full h-auto object-contain max-h-72">
+                </div>
+
+                <!-- Información técnica -->
+                <div id="nudo-detail-info-container"
+                    class="bg-bear-olive-100 border-2 border-bear-olive-200 p-4 rounded-2xl">
+                    <div id="nudo-detail-info-loading" class="text-center text-bear-olive-600 text-xs py-4">
+                        <i data-lucide="loader" class="w-5 h-5 mx-auto mb-1.5 text-bear-olive-400 animate-spin"></i>
+                        <p>Cargando información...</p>
+                    </div>
+                    <div id="nudo-detail-info" class="hidden"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-VISTA D: VISOR DE LEY (PDF)            -->
+        <!-- ========================================== -->
+        <div id="ley-viewer" class="hidden space-y-4">
+
+            <!-- Top Navigation -->
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <button onclick="closeLeyViewer()"
+                    class="flex items-center gap-1.5 text-xs text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md">
+                    <span>Volver a Documentos</span>
+                </button>
+                <button onclick="showView('menu')"
+                    class="text-[10px] text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md flex items-center gap-1">
+                    <span>Menú</span>
+                </button>
+            </div>
+
+            <!-- Título -->
+            <div>
+                <h3 class="text-2xl font-bold text-bear-textoClaro mb-4">
+                    <span>Ley del Voluntariado - Ley N° 3314</span>
+                </h3>
+                <p class="text-xs text-bear-textoClaro/70 mt-0.5">Ley del Voluntariado Social de Bolivia</p>
+            </div>
+
+            <!-- Visor PDF -->
+            <div class="rounded-2xl overflow-hidden border-2 border-bear-olive-200 bg-bear-olive-100 shadow-inner">
+                <iframe src="assets/files/ley-no-3314.pdf"
+                    class="w-full h-[75vh] rounded-lg"
+                    title="Visor de PDF - Ley N° 3314">
+                </iframe>
+            </div>
+
+            <!-- Fallback para móviles antiguos -->
+            <a href="assets/files/ley-no-3314.pdf" target="_blank"
+                class="block w-full py-3 px-4 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold text-center text-xs transition-all shadow-md">
+                ¿No puedes ver el archivo? Clic aquí para descargarlo
+            </a>
+
+        </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VISTA 5: CHECKLIST MOCHILA DE RESCATE      -->
+        <!-- ========================================== -->
+        <div id="view-checklist"
+            class="app-view hidden bg-bear-bg border border-bear-olive-700 p-5 md:p-6 rounded-3xl shadow-2xl relative glow-bear flex flex-col">
+
+            <!-- Top Navigation -->
+            <div class="flex items-center justify-between border-b border-bear-olive-700 pb-3 mb-4 shrink-0">
+                <button onclick="showView('menu')"
+                    class="flex items-center gap-1.5 text-xs text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md">
+                    <span>Volver al Menú</span>
+                </button>
+            </div>
+
+            <!-- Title -->
+            <div class="mb-4 shrink-0">
+                <h3 class="text-2xl font-bold text-bear-textoClaro">
+                    <span>Control de Inventario y Mochila</span>
+                </h3>
+                <p class="text-xs text-bear-textoClaro/70 mt-0.5">Personalizá tu mochila y marcá los elementos verificados.</p>
+            </div>
+
+            <!-- Top actions: botones principales -->
+            <div class="flex gap-2 mb-6 shrink-0">
+                <button id="btn-edit-toggle" onclick="toggleEditMode()"
+                    class="flex-1 py-3 px-3 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold text-xs transition-all shadow-md">
+                    <span>Editar Mochila</span>
+                </button>
+                <button id="btn-uncheck-all" onclick="uncheckAll()"
+                    class="flex-1 py-3 px-3 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold text-xs transition-all shadow-md">
+                    <span>Desmarcar todo</span>
+                </button>
+            </div>
+
+            <!-- Add item row (oculto por defecto, visible en modo edición) -->
+            <div id="checklist-add-row" class="hidden flex gap-2 mb-6 shrink-0">
+                <input type="text" id="checklist-new-item" placeholder="Ej: Cinta tubular..."
+                    class="flex-1 bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl py-2.5 px-3 text-xs text-bear-textoOscuro placeholder-bear-textoOscuro/40 focus:outline-none focus:ring-2 focus:ring-bear-olive-500 transition-all">
+                <button onclick="addChecklistItem()"
+                    class="bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 font-bold py-2.5 px-3 rounded-xl text-xs transition-all shadow-md shrink-0">
+                    <span>Añadir</span>
+                </button>
+            </div>
+
+            <!-- Checklist list -->
+            <div id="checklist-container" class="flex-1 overflow-y-auto min-h-0">
+                <!-- Dynamic items rendered by JS -->
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VISTA 6: HISTORIAL DE GUARDIAS             -->
+        <!-- ========================================== -->
+        <div id="view-history"
+            class="app-view hidden bg-bear-bg border border-bear-olive-700 p-5 md:p-6 rounded-3xl shadow-2xl relative glow-bear flex flex-col">
+
+            <!-- Top Navigation / Header -->
+            <div class="flex items-center border-b border-bear-olive-700 pb-3 mb-5 shrink-0">
+                <button onclick="showView('menu')"
+                    class="flex items-center gap-1.5 text-xs text-white bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 font-bold py-1.5 px-3 rounded-xl transition-all shadow-md">
+                    <span>Volver al Menú</span>
+                </button>
+            </div>
+
+            <!-- Title -->
+            <div class="mb-4 shrink-0">
+                <h3 class="text-2xl font-bold text-bear-textoClaro mb-4">
+                    <span>Historial de Guardias Registradas</span>
+                </h3>
+                <p class="text-xs text-bear-textoClaro/70 mt-0.5">Consulta los registros históricos y novedades del
+                    personal de la institución.</p>
+            </div>
+
+            <!-- History list container -->
+            <div id="history-view-list" class="flex-1 overflow-y-auto min-h-0 space-y-2 pr-1">
+                <!-- Dynamic cards rendered by JS -->
+            </div>
+
+            <!-- Empty state -->
+            <div id="history-view-empty" class="flex-1 flex flex-col items-center justify-center py-12 text-center text-bear-textoClaro/40 text-xs">
+                <i data-lucide="clipboard" class="w-8 h-8 mx-auto mb-2 text-bear-textoClaro/30"></i>
+                <p>No hay registros de guardias guardados en este dispositivo.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL OVERLAY: HISTORIAL DE GUARDIAS      -->
+    <!-- ========================================== -->
+    <div id="history-modal" class="hidden fixed inset-0 z-45 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-[#16300d]/85 backdrop-blur-sm" onclick="closeHistoryModal()"></div>
+        <div
+            class="bg-white border border-mustard/20 w-full max-w-md rounded-3xl shadow-2xl relative z-10 overflow-hidden flex flex-col max-h-[80vh] glow-bear">
+
+            <div class="bg-bear-olive-500 border-b-2 border-bear-olive-700 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-sm text-white">Guardias Recientes</h3>
+                </div>
+                <button onclick="closeHistoryModal()" class="text-white/70 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- List container -->
+            <div id="modal-history-list" class="p-4 space-y-3 overflow-y-auto flex-1">
+                <!-- Dynamic cards -->
+            </div>
+
+            <div class="p-4 bg-bear-olive-100 border-t-2 border-bear-olive-200 text-center">
+                <button onclick="closeHistoryModal()"
+                    class="w-full bg-bear-olive-500 hover:bg-bear-olive-600 text-white font-bold py-2.5 rounded-xl text-xs transition-all border-2 border-bear-olive-700 shadow-md">
+                    Cerrar Historial
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL OVERLAY: DETALLES DE GUARDIA        -->
+    <!-- ========================================== -->
+    <div id="view-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-[#16300d]/85 backdrop-blur-sm" onclick="closeGuardModal()"></div>
+        <div
+            class="bg-white border border-mustard/20 w-full max-w-md rounded-3xl shadow-2xl relative z-10 overflow-hidden flex flex-col max-h-[85vh] glow-bear">
+
+            <div class="bg-bear-olive-500 border-b-2 border-bear-olive-700 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <h3 class="font-bold text-xs text-white">Hoja de Guardia</h3>
+                </div>
+                <button onclick="closeGuardModal()" class="text-white/70 hover:text-white p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="p-4 space-y-4 overflow-y-auto flex-1 text-xs leading-relaxed">
+                <!-- Date/Time box -->
+                <div class="grid grid-cols-2 gap-3 bg-bear-olive-500 p-3 rounded-2xl border-2 border-bear-olive-700">
+                    <div>
+                        <span class="text-[9px] uppercase font-bold text-white/70 block mb-0.5">Fecha</span>
+                        <span id="modal-date" class="font-semibold text-white font-mono"></span>
+                    </div>
+                    <div>
+                        <span class="text-[9px] uppercase font-bold text-white/70 block mb-0.5">Horas</span>
+                        <span id="modal-hours" class="font-semibold text-white font-mono"></span>
+                    </div>
+                </div>
+
+                <!-- Officers -->
+                <div class="space-y-1">
+                    <h4 class="text-[9px] uppercase font-bold text-white tracking-wider bg-bear-olive-500 inline-block px-2 py-0.5 rounded-lg border border-bear-olive-700">Mandos del Turno</h4>
+                    <div class="divide-y divide-bear-olive-200 bg-bear-olive-100 p-3 rounded-2xl border-2 border-bear-olive-200">
+                        <div class="flex justify-between py-1.5">
+                            <span class="text-bear-olive-700">Jefe de Guardia:</span>
+                            <span id="modal-boss" class="font-semibold text-bear-olive-800"></span>
+                        </div>
+                        <div class="flex justify-between py-1.5">
+                            <span class="text-bear-olive-700">Jefe de Seguridad:</span>
+                            <span id="modal-safety" class="font-semibold text-bear-olive-800"></span>
+                        </div>
+                        <div class="flex justify-between py-1.5">
+                            <span class="text-bear-olive-700">Jefe de Comunicaciones:</span>
+                            <span id="modal-comms" class="font-semibold text-bear-olive-800"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crew -->
+                <div class="space-y-1">
+                    <h4 class="text-[9px] uppercase font-bold text-white tracking-wider bg-bear-olive-500 inline-block px-2 py-0.5 rounded-lg border border-bear-olive-700">Personal</h4>
+                    <div id="modal-crew"
+                        class="bg-bear-olive-100 border-2 border-bear-olive-200 p-3 rounded-2xl text-bear-olive-700 whitespace-pre-line leading-relaxed">
+                    </div>
+                </div>
+
+                <!-- Comments -->
+                <div class="space-y-1">
+                    <h4 class="text-[9px] uppercase font-bold text-white tracking-wider bg-bear-olive-500 inline-block px-2 py-0.5 rounded-lg border border-bear-olive-700">Novedades / Bitácora
+                    </h4>
+                    <div id="modal-incidents"
+                        class="bg-bear-olive-100 border-2 border-bear-olive-200 p-3 rounded-2xl text-bear-olive-700 whitespace-pre-line leading-relaxed">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Share Button -->
+            <div class="p-4 bg-bear-olive-100 border-t-2 border-bear-olive-200 flex gap-2.5">
+                <button id="modal-btn-export-whatsapp"
+                    class="flex-1 bg-bear-olive-500 hover:bg-bear-olive-600 text-white font-bold py-2.5 rounded-2xl text-xs transition-all border-2 border-bear-olive-700 shadow-md flex items-center justify-center gap-1.5">
+                    <i data-lucide="share-2" class="w-4 h-4"></i>
+                    <span>Copiar a WhatsApp</span>
+                </button>
+                <button onclick="closeGuardModal()"
+                    class="bg-bear-olive-500 hover:bg-bear-olive-600 text-white font-bold py-2.5 px-4 rounded-2xl text-xs transition-all border-2 border-bear-olive-700 shadow-md">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- LOGICA JAVASCRIPT                          -->
+    <!-- ========================================== -->
+    <script>
+        // --- BASE DE DATOS DE CODIGOS QAP ---
+        const QAP_DATABASE = [
+            { code: "QAP", meaning: "En espera / Disponible en frecuencia.", category: "DISPONIBLE" },
+            { code: "QRV", meaning: "Listo / Atento / Dispuesto para el servicio.", category: "DISPONIBLE" },
+            { code: "QSL", meaning: "Entendido / Mensaje recibido.", category: "INFORMATIVO" },
+            { code: "QTH", meaning: "Ubicación geográfica actual / Domicilio.", category: "INFORMATIVO" },
+            { code: "QRL", meaning: "Estoy ocupado (frecuencia ocupada).", category: "OCUPADO" },
+            { code: "QRT", meaning: "Cesar transmisiones / Fin de la guardia.", category: "OCUPADO" },
+            { code: "QTM", meaning: "Hora exacta de los acontecimientos.", category: "INFORMATIVO" },
+            { code: "QNB", meaning: "Estación repetidora de radio activa.", category: "INFORMATIVO" },
+            { code: "QSM", meaning: "Repita el último mensaje de radio.", category: "INFORMATIVO" },
+            { code: "QTC", meaning: "Tengo mensajes para transmitir.", category: "INFORMATIVO" },
+            { code: "QTR", meaning: "Hora local de la estación.", category: "INFORMATIVO" },
+            { code: "QTI", meaning: "En camino / Ruta hacia destino.", category: "DISPONIBLE" }
+        ];
+
+        const listaPersonalBEAR = [
+            "Fernando Gallardo Cossio",
+            "Kevin Rivas",
+            "Liz Aviles",
+            "Marcelo Perez",
+            "Pablo Muñoz",
+            "Belen Rioja",
+            "Fabio Tonani",
+            "Clarivel Vargas",
+            "Daniela Retamoso",
+            "Fernando Ruiz",
+            "Luciana Alvarez",
+            "Greta Camacho"
+        ];
+
+        // --- ESTADO GENERAL ---
+        let currentView = "login";
+        let guardsArray = [];
+        let editingGuardId = null;
+
+        // Estado módulo de nudos
+        let nudosData = [];
+        let currentNudoPath = '';
+        let currentNudoTab = 'armado';
+
+        // --- BOOTSTRAP ---
+        window.addEventListener('DOMContentLoaded', () => {
+            // Set default date in form
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('guard-date').value = today;
+
+            // Load from storage
+            loadGuardsFromStorage();
+
+            // Populate QAP list
+            renderQapList(QAP_DATABASE);
+
+            // Initialize autocomplete fields
+            setupAutocomplete('guard-boss', 'guard-boss-list', listaPersonalBEAR);
+            setupAutocomplete('guard-safety-boss', 'guard-safety-boss-list', listaPersonalBEAR);
+            setupAutocomplete('guard-comms-boss', 'guard-comms-boss-list', listaPersonalBEAR);
+            setupAutocomplete('guard-crew', 'guard-crew-list', listaPersonalBEAR);
+
+            // Render checklist
+            renderChecklist();
+
+            // Clock update
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // Show login view
+            showView('login');
+        });
+
+        // --- LIVE CLOCK ---
+        function updateClock() {
+            const now = new Date();
+            const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+            const dayName = days[now.getDay()];
+            const dayNum = String(now.getDate()).padStart(2, '0');
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            const clockString = `${dayName}, ${dayNum} ${monthName} - ${hours}:${minutes}:${seconds}`;
+            const clockEl = document.getElementById('menu-live-clock');
+            if (clockEl) clockEl.innerText = clockString;
+        }
+
+        // --- SISTEMA DE NAVEGACION DE VISTAS (CENTRADAS) ---
+        function showView(viewId) {
+            // Hide all views
+            document.querySelectorAll('.app-view').forEach(view => {
+                view.classList.add('hidden', 'opacity-0', 'scale-95');
+            });
+
+            // Show requested view
+            const activeView = document.getElementById(`view-${viewId}`);
+            if (activeView) {
+                activeView.classList.remove('hidden');
+                setTimeout(() => {
+                    activeView.classList.remove('opacity-0', 'scale-95');
+                }, 50);
+            }
+
+            currentView = viewId;
+
+            // Reset form state when navigating away or entering fresh
+            if (viewId === 'menu') {
+                resetFormState();
+            }
+            if (viewId === 'form' && !editingGuardId) {
+                resetFormState();
+            }
+
+            // Re-render checklist with the current user's data
+            if (viewId === 'checklist') {
+                renderChecklist();
+            }
+
+            // Render history when entering the history view
+            if (viewId === 'history') {
+                renderGuardHistoryView();
+            }
+
+            // Reset QAP section to document index when entering from menu
+            if (viewId === 'qap') {
+                const indexEl = document.getElementById('qap-index');
+                const modules = ['qap-module', 'nudos-module', 'ley-viewer'];
+                if (indexEl) indexEl.classList.remove('hidden');
+                modules.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('hidden');
+                });
+            }
+
+            lucide.createIcons();
+        }
+
+        // --- SIMULATED LOGIN ---
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const btn = document.getElementById('btn-login-submit');
+
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Conectando...</span>
+            `;
+
+            setTimeout(() => {
+                currentUser = email.split('@')[0].toLowerCase();
+                showToast("Acceso correcto al sistema", "success");
+                showView('menu');
+                btn.disabled = false;
+                btn.innerHTML = `<span>Ingresar</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+                lucide.createIcons();
+            }, 800);
+        }
+
+        // --- LOGOUT ---
+        function handleLogout() {
+            currentUser = null;
+            showToast("Sesión cerrada", "info");
+            showView('login');
+            document.getElementById('login-form').reset();
+        }
+
+        // --- TOAST NOTIFICATIONS ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            let iconColor = "text-emerald-400";
+            let icon = "check-circle";
+
+            if (type === 'error') {
+                iconColor = "text-rose-400";
+                icon = "alert-triangle";
+            } else if (type === 'info') {
+                iconColor = "text-bear-textoClaro";
+                icon = "info";
+            }
+
+            toast.className = `p-3.5 rounded-2xl border border-white/10 bg-[#151d14] ${iconColor} shadow-xl flex items-start gap-2.5 w-full pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 backdrop-blur-md`;
+
+            toast.innerHTML = `
+                <div class="shrink-0 mt-0.5">
+                    <i data-lucide="${icon}" class="w-4 h-4"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-xs font-semibold leading-snug text-bear-textoClaro">${message}</p>
+                </div>
+                <button class="text-white/40 hover:text-white/80" onclick="this.parentElement.remove()">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 3000);
+        }
+
+        // --- NAVEGACIÓN: ÍNDICE DE DOCUMENTOS <-> MÓDULOS ---
+        function openNudosModule() {
+            const indexEl = document.getElementById('qap-index');
+            const moduleEl = document.getElementById('nudos-module');
+            indexEl.classList.add('hidden');
+            moduleEl.classList.remove('hidden');
+
+            document.getElementById('nudos-list-view').classList.remove('hidden');
+            document.getElementById('nudos-detail-view').classList.add('hidden');
+
+            loadNudosIndex();
+
+            lucide.createIcons();
+        }
+
+        function loadNudosIndex() {
+            const container = document.getElementById('nudos-list-container');
+            const loading = document.getElementById('nudos-list-loading');
+            const empty = document.getElementById('nudos-list-empty');
+
+            container.innerHTML = '';
+            loading.classList.remove('hidden');
+            empty.classList.add('hidden');
+
+            fetch('assets/nudos_index.json')
+                .then(res => {
+                    if (!res.ok) throw new Error('Error al cargar el índice');
+                    return res.json();
+                })
+                .then(data => {
+                    loading.classList.add('hidden');
+                    nudosData = data;
+
+                    if (!nudosData || nudosData.length === 0) {
+                        empty.classList.remove('hidden');
+                        return;
+                    }
+
+                    let html = '';
+                    nudosData.forEach(nudo => {
+                        html += `
+                            <div onclick="showNudoDetail('${nudo.id}')"
+                                class="w-full p-4 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                                <div class="text-left">
+                                    <span class="block text-sm">${nudo.nombre}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                    lucide.createIcons();
+                })
+                .catch(err => {
+                    loading.classList.add('hidden');
+                    empty.classList.remove('hidden');
+                    empty.innerHTML = `
+                        <i data-lucide="alert-triangle" class="w-6 h-6 mx-auto mb-1.5 text-bear-olive-400"></i>
+                        <p>Error al cargar los nudos: ${err.message}</p>
+                    `;
+                    lucide.createIcons();
+                });
+        }
+
+        function showNudoDetail(nudoId) {
+            const nudo = nudosData.find(n => n.id === nudoId);
+            if (!nudo) {
+                showToast('Nudo no encontrado', 'error');
+                return;
+            }
+
+            currentNudoPath = nudo.carpeta;
+            currentNudoTab = 'armado';
+
+            document.getElementById('nudos-list-view').classList.add('hidden');
+            document.getElementById('nudos-detail-view').classList.remove('hidden');
+
+            const titleEl = document.getElementById('nudo-detail-title');
+            titleEl.innerHTML = `<span>${nudo.nombre}</span>`;
+
+            document.getElementById('nudo-tab-armado').className = 'py-2.5 px-3 rounded-xl bg-white text-bear-olive-700 transition-all shadow-sm font-bold';
+            document.getElementById('nudo-tab-vista_360').className = 'py-2.5 px-3 rounded-xl text-white/80 transition-all font-bold';
+
+            document.getElementById('nudo-detail-image').src = `${nudo.carpeta}armado.webp`;
+
+            loadNudoInfo(nudo.carpeta);
+
+            lucide.createIcons();
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function loadNudoInfo(path) {
+            const infoContainer = document.getElementById('nudo-detail-info');
+            const loading = document.getElementById('nudo-detail-info-loading');
+
+            infoContainer.classList.add('hidden');
+            loading.classList.remove('hidden');
+            infoContainer.innerHTML = '';
+
+            fetch(`${path}info.txt`)
+                .then(res => {
+                    if (!res.ok) throw new Error('No se pudo cargar la información');
+                    return res.text();
+                })
+                .then(text => {
+                    loading.classList.add('hidden');
+
+                    const lines = text.split('\n');
+                    let title = '';
+                    let usoLines = [];
+                    let capturingUso = false;
+
+                    for (let i = 0; i < lines.length; i++) {
+                        const line = lines[i].trim();
+
+                        if (!title && line.length > 0) {
+                            title = line;
+                            continue;
+                        }
+
+                        if (line === 'Uso') {
+                            capturingUso = true;
+                            continue;
+                        }
+
+                        if (capturingUso) {
+                            if (/^(Advertencia|También conocido como|Relacionados)/i.test(line)) {
+                                break;
+                            }
+                            if (line.length > 0) {
+                                usoLines.push(line);
+                            }
+                        }
+                    }
+
+                    const usoText = usoLines.join(' ');
+
+                    infoContainer.innerHTML = `
+                        <h3 class="text-xl font-bold text-emerald-950 mb-2">${escapeHtml(title)}</h3>
+                        <p class="text-emerald-900 text-sm font-medium leading-relaxed">${escapeHtml(usoText)}</p>
+                    `;
+                    infoContainer.classList.remove('hidden');
+                })
+                .catch(() => {
+                    loading.classList.add('hidden');
+                    infoContainer.innerHTML = '<p class="text-emerald-900 text-sm font-medium">Información no disponible.</p>';
+                    infoContainer.classList.remove('hidden');
+                });
+        }
+
+        function backToNudosList() {
+            document.getElementById('nudos-detail-view').classList.add('hidden');
+            document.getElementById('nudos-list-view').classList.remove('hidden');
+            currentNudoPath = '';
+            currentNudoTab = 'armado';
+        }
+
+        function switchNudoTab(tab) {
+            if (tab === currentNudoTab || !currentNudoPath) return;
+
+            currentNudoTab = tab;
+
+            const btnArmado = document.getElementById('nudo-tab-armado');
+            const btnVista = document.getElementById('nudo-tab-vista_360');
+            const img = document.getElementById('nudo-detail-image');
+
+            if (tab === 'armado') {
+                btnArmado.className = 'py-2.5 px-3 rounded-xl bg-white text-bear-olive-700 transition-all shadow-sm font-bold';
+                btnVista.className = 'py-2.5 px-3 rounded-xl text-white/80 transition-all font-bold';
+                img.src = `${currentNudoPath}armado.webp`;
+            } else {
+                btnVista.className = 'py-2.5 px-3 rounded-xl bg-white text-bear-olive-700 transition-all shadow-sm font-bold';
+                btnArmado.className = 'py-2.5 px-3 rounded-xl text-white/80 transition-all font-bold';
+                img.src = `${currentNudoPath}vista_360.webp`;
+            }
+        }
+
+        function closeNudosModule() {
+            const indexEl = document.getElementById('qap-index');
+            const moduleEl = document.getElementById('nudos-module');
+            moduleEl.classList.add('hidden');
+            indexEl.classList.remove('hidden');
+
+            document.getElementById('nudos-list-view').classList.remove('hidden');
+            document.getElementById('nudos-detail-view').classList.add('hidden');
+            currentNudoPath = '';
+            currentNudoTab = 'armado';
+
+            lucide.createIcons();
+        }
+
+        // --- VISOR DE LEY (PDF) ---
+        function openLeyViewer() {
+            const indexEl = document.getElementById('qap-index');
+            const viewerEl = document.getElementById('ley-viewer');
+            indexEl.classList.add('hidden');
+            viewerEl.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeLeyViewer() {
+            const indexEl = document.getElementById('qap-index');
+            const viewerEl = document.getElementById('ley-viewer');
+            viewerEl.classList.add('hidden');
+            indexEl.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function openQapModule() {
+            const indexEl = document.getElementById('qap-index');
+            const moduleEl = document.getElementById('qap-module');
+            indexEl.classList.add('hidden');
+            moduleEl.classList.remove('hidden');
+            renderQapList(QAP_DATABASE);
+            lucide.createIcons();
+        }
+
+        function closeQapModule() {
+            const indexEl = document.getElementById('qap-index');
+            const moduleEl = document.getElementById('qap-module');
+            moduleEl.classList.add('hidden');
+            indexEl.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        // ========================================================
+        // AUTOCOMPLETADO DE PERSONAL
+        // ========================================================
+
+        function setupAutocomplete(inputId, listId, data) {
+            const input = document.getElementById(inputId);
+            const list = document.getElementById(listId);
+            const isTextarea = input.tagName === 'TEXTAREA';
+            let hideTimeout = null;
+
+            function getQuery() {
+                const val = input.value;
+                if (isTextarea) {
+                    const cursorPos = input.selectionStart;
+                    const lastNewline = val.lastIndexOf('\n', cursorPos - 1);
+                    return val.slice(lastNewline + 1, cursorPos);
+                }
+                return val;
+            }
+
+            function renderSuggestions(query) {
+                const q = query.trim();
+                if (!q) { list.classList.add('hidden'); return; }
+                const filtered = data.filter(n => n.toLowerCase().includes(q.toLowerCase()));
+                if (!filtered.length) { list.classList.add('hidden'); return; }
+                list.innerHTML = filtered.map(n =>
+                    `<button type="button" class="w-full text-left px-3 py-2.5 text-xs text-bear-textoClaro hover:bg-bear-olive-700/60 first:rounded-t-xl last:rounded-b-xl transition-colors">${n}</button>`
+                ).join('');
+                list.classList.remove('hidden');
+            }
+
+            input.addEventListener('input', () => {
+                if (hideTimeout) clearTimeout(hideTimeout);
+                renderSuggestions(getQuery());
+            });
+
+            input.addEventListener('focus', () => renderSuggestions(getQuery()));
+
+            input.addEventListener('blur', () => {
+                hideTimeout = setTimeout(() => list.classList.add('hidden'), 200);
+            });
+
+            list.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                const btn = e.target.closest('button');
+                if (!btn) return;
+                const name = btn.textContent;
+                if (isTextarea) {
+                    const val = input.value;
+                    const cursorPos = input.selectionStart;
+                    const lastNewline = val.lastIndexOf('\n', cursorPos - 1);
+                    const before = val.slice(0, lastNewline + 1);
+                    const after = val.slice(cursorPos);
+                    input.value = before + name + '\n' + after;
+                    const newPos = before.length + name.length + 1;
+                    input.setSelectionRange(newPos, newPos);
+                } else {
+                    input.value = name;
+                }
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                list.classList.add('hidden');
+                input.focus();
+            });
+        }
+
+        // ========================================================
+        // REGISTRO DE GUARDIA (DATOS & STORAGE)
+        // ========================================================
+
+        function saveGuardRecord(event) {
+            event.preventDefault();
+
+            const dateValue = document.getElementById('guard-date').value;
+            const startTime = document.getElementById('guard-start-time').value;
+            const endTime = document.getElementById('guard-end-time').value;
+            const boss = document.getElementById('guard-boss').value;
+            const safetyBoss = document.getElementById('guard-safety-boss').value;
+            const commsBoss = document.getElementById('guard-comms-boss').value;
+            const crew = document.getElementById('guard-crew').value;
+            const incidents = document.getElementById('guard-incidents').value;
+
+            // Day of week text
+            const parsedDate = new Date(dateValue + 'T00:00:00');
+            const weekdayName = parsedDate.toLocaleDateString('es-ES', { weekday: 'long' });
+            const capitalizedWeekday = weekdayName.charAt(0).toUpperCase() + weekdayName.slice(1);
+
+            if (editingGuardId) {
+                const index = guardsArray.findIndex(g => g.id === editingGuardId);
+                if (index !== -1) {
+                    guardsArray[index] = {
+                        ...guardsArray[index],
+                        date: dateValue,
+                        weekday: capitalizedWeekday,
+                        startTime: startTime,
+                        endTime: endTime,
+                        boss: boss,
+                        safetyBoss: safetyBoss,
+                        commsBoss: commsBoss,
+                        crew: crew,
+                        incidents: incidents
+                    };
+                }
+                editingGuardId = null;
+                showToast("Guardia actualizada con éxito", "success");
+            } else {
+                const newGuard = {
+                    id: 'G-' + Date.now(),
+                    date: dateValue,
+                    weekday: capitalizedWeekday,
+                    startTime: startTime,
+                    endTime: endTime,
+                    boss: boss,
+                    safetyBoss: safetyBoss,
+                    commsBoss: commsBoss,
+                    crew: crew,
+                    incidents: incidents
+                };
+                guardsArray.unshift(newGuard);
+                showToast("Guardia registrada con éxito", "success");
+            }
+
+            localStorage.setItem('bear_historial_guardias', JSON.stringify(guardsArray));
+            resetFormState();
+            renderGuardHistoryView();
+        }
+
+        function resetFormState() {
+            editingGuardId = null;
+            document.getElementById('guard-form').reset();
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('guard-date').value = today;
+            const btnLabel = document.getElementById('btn-guard-label');
+            if (btnLabel) btnLabel.textContent = 'Guardar Registro';
+            const deleteBtn = document.getElementById('btn-delete-guard');
+            if (deleteBtn) deleteBtn.classList.add('hidden');
+        }
+
+        function loadGuardsFromStorage() {
+            const data = localStorage.getItem('bear_historial_guardias');
+            guardsArray = data ? JSON.parse(data) : [];
+        }
+
+        function fillDemoData() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('guard-date').value = today;
+            document.getElementById('guard-start-time').value = "08:00";
+            document.getElementById('guard-end-time').value = "20:00";
+            document.getElementById('guard-boss').value = "Fernando Gallardo Cossio";
+            document.getElementById('guard-safety-boss').value = "Marcelo Perez";
+            document.getElementById('guard-comms-boss').value = "Belen Rioja";
+            document.getElementById('guard-crew').value =
+                "Liz Aviles (Chofer K-12)\n" +
+                "Clarivel Vargas (Rescatista)\n" +
+                "Pablo Muñoz (Apoyo)";
+            document.getElementById('guard-incidents').value = "Guardia sin incidentes. Se realizó chequeo preventivo de la bomba de agua del camión de bomberos K-12. Sin emergencias en cuadrante QAP.";
+
+            showToast("Datos de demostración aplicados", "info");
+        }
+
+        function clearAllHistory() {
+            if (guardsArray.length === 0) return;
+            if (confirm("¿Vaciar todo el historial de guardias?")) {
+                guardsArray = [];
+                localStorage.removeItem('bear_historial_guardias');
+                renderGuardHistoryView();
+                showToast("Historial eliminado", "info");
+            }
+        }
+
+        // --- RENDERIZAR HISTORIAL EN VISTA INDEPENDIENTE ---
+
+        function renderGuardHistoryView() {
+            const list = document.getElementById('history-view-list');
+            const empty = document.getElementById('history-view-empty');
+
+            if (guardsArray.length === 0) {
+                list.innerHTML = '';
+                list.classList.add('hidden');
+                empty.classList.remove('hidden');
+                return;
+            }
+            list.classList.remove('hidden');
+            empty.classList.add('hidden');
+
+            let html = '';
+            guardsArray.forEach(guard => {
+                const shortDate = guard.date.split('-').reverse().slice(0, 2).join('/');
+                const incipit = guard.incidents
+                    ? guard.incidents.slice(0, 60) + (guard.incidents.length > 60 ? '...' : '')
+                    : '';
+                html += `
+                    <div onclick="openGuardDetails('${guard.id}')"
+                         class="bg-bear-contenedor border-2 border-bear-olive-500 p-3 rounded-xl cursor-pointer transition-all hover:border-bear-olive-600 shadow-sm">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-extrabold text-[#111c10] text-xs">${guard.weekday}, ${shortDate}</span>
+                                    <span class="text-[9px] font-mono font-semibold text-[#111c10]">${guard.startTime} - ${guard.endTime}</span>
+                                </div>
+                                <div class="text-[10px] text-[#111c10]/90 mt-0.5 truncate font-medium">Jefe: ${guard.boss}</div>
+                                <div class="text-[10px] text-[#111c10]/80 mt-0.5 truncate">Seguridad: ${guard.safetyBoss} · Comms: ${guard.commsBoss}</div>
+                                ${incipit ? `<div class="text-[9px] text-[#111c10]/80 mt-0.5 line-clamp-2 leading-relaxed">${incipit}</div>` : ''}
+                            </div>
+                            <div class="shrink-0">
+                                <button onclick="editGuardRecord('${guard.id}', event)"
+                                    class="p-2 bg-bear-olive-100 hover:bg-bear-olive-200 text-bear-olive-700 rounded-lg transition-all shadow-sm active:scale-90 font-bold text-[10px]">
+                                    Editar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function editGuardRecord(id, event) {
+            event.stopPropagation();
+            const guard = guardsArray.find(g => g.id === id);
+            if (!guard) return;
+
+            editingGuardId = id;
+
+            document.getElementById('guard-date').value = guard.date;
+            document.getElementById('guard-start-time').value = guard.startTime;
+            document.getElementById('guard-end-time').value = guard.endTime;
+            document.getElementById('guard-boss').value = guard.boss;
+            document.getElementById('guard-safety-boss').value = guard.safetyBoss;
+            document.getElementById('guard-comms-boss').value = guard.commsBoss;
+            document.getElementById('guard-crew').value = guard.crew;
+            document.getElementById('guard-incidents').value = guard.incidents;
+
+            const btnLabel = document.getElementById('btn-guard-label');
+            if (btnLabel) btnLabel.textContent = 'Actualizar Registro';
+
+            const deleteBtn = document.getElementById('btn-delete-guard');
+            if (deleteBtn) deleteBtn.classList.remove('hidden');
+
+            showView('form');
+        }
+
+        function deleteGuardFromEdit() {
+            if (!editingGuardId) return;
+            if (!confirm("¿Estás seguro de eliminar este registro?")) return;
+
+            guardsArray = guardsArray.filter(g => g.id !== editingGuardId);
+            localStorage.setItem('bear_historial_guardias', JSON.stringify(guardsArray));
+
+            editingGuardId = null;
+            resetFormState();
+            renderGuardHistoryView();
+            showView('history');
+            showToast("Registro eliminado", "info");
+        }
+
+        // ========================================================
+        // CHECKLIST DE MOCHILA DE RESCATE
+        // ========================================================
+
+        const mochilaInicialBase = [
+            "Botas",
+            "Agua",
+            "Casco",
+            "Linterna (con pilas)",
+            "Máscara de gas",
+            "Visores",
+            "Gasas",
+            "Esclavina"
+        ];
+
+        let currentUser = null;
+        let isEditing = false;
+
+        function getStorageKey() {
+            return 'mochila_usuario_' + (currentUser || 'anonimo');
+        }
+
+        function getDefaultState() {
+            return { items: [...mochilaInicialBase], checked: {} };
+        }
+
+        function loadChecklist() {
+            try {
+                const stored = localStorage.getItem(getStorageKey());
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (parsed && Array.isArray(parsed.items)) return parsed;
+                }
+            } catch {}
+            return getDefaultState();
+        }
+
+        function saveChecklist(state) {
+            localStorage.setItem(getStorageKey(), JSON.stringify(state));
+        }
+
+        function addChecklistItem() {
+            const input = document.getElementById('checklist-new-item');
+            const name = input.value.trim();
+            if (!name) return;
+            const state = loadChecklist();
+            state.items.push(name);
+            saveChecklist(state);
+            input.value = '';
+            renderChecklist();
+            showToast("Item añadido", "success");
+        }
+
+        function removeChecklistItem(index) {
+            const state = loadChecklist();
+            const removed = state.items[index];
+            state.items.splice(index, 1);
+            delete state.checked[removed];
+            saveChecklist(state);
+            renderChecklist();
+            showToast("Item eliminado", "info");
+        }
+
+        function toggleChecklistItem(index) {
+            const state = loadChecklist();
+            const key = state.items[index];
+            if (state.checked[key]) {
+                delete state.checked[key];
+            } else {
+                state.checked[key] = true;
+            }
+            saveChecklist(state);
+        }
+
+        function uncheckAll() {
+            const state = loadChecklist();
+            state.checked = {};
+            saveChecklist(state);
+            renderChecklist();
+            showToast("Todos desmarcados", "info");
+        }
+
+        function restoreBaseList() {
+            if (confirm("¿Restaurar la lista base del cuartel? Se perderán los items personalizados.")) {
+                saveChecklist(getDefaultState());
+                renderChecklist();
+                showToast("Lista base restaurada", "success");
+            }
+        }
+
+        function toggleEditMode() {
+            const btn = document.getElementById('btn-edit-toggle');
+            const addRow = document.getElementById('checklist-add-row');
+            const uncheckBtn = document.getElementById('btn-uncheck-all');
+
+            isEditing = !isEditing;
+
+            if (isEditing) {
+                // Limpiar todos los checks antes de entrar en modo edición
+                const state = loadChecklist();
+                state.checked = {};
+                saveChecklist(state);
+
+                btn.innerHTML = `<span>Guardar Cambios</span>`;
+                btn.className = 'flex-1 py-3 px-3 bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-emerald-800 rounded-2xl font-bold text-xs transition-all shadow-md';
+                addRow.classList.remove('hidden');
+                uncheckBtn.classList.add('hidden');
+            } else {
+                btn.innerHTML = `<span>Editar Mochila</span>`;
+                btn.className = 'flex-1 py-3 px-3 bg-bear-olive-500 hover:bg-bear-olive-600 text-white border-2 border-bear-olive-700 rounded-2xl font-bold text-xs transition-all shadow-md';
+                addRow.classList.add('hidden');
+                uncheckBtn.classList.remove('hidden');
+            }
+
+            renderChecklist();
+            lucide.createIcons();
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checklist-container');
+            const state = loadChecklist();
+
+            if (state.items.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-center text-bear-textoClaro/40 text-xs">
+                        <i data-lucide="package" class="w-8 h-8 mx-auto mb-2 text-bear-textoClaro/30"></i>
+                        <p>Tu mochila está vacía. Añadí elementos usando el campo de arriba.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            let html = '';
+            state.items.forEach((item, index) => {
+                const checked = state.checked[item] || false;
+                const trashHidden = isEditing ? '' : 'hidden';
+                html += `
+                    <div class="flex items-center gap-3 px-4 py-3 bg-bear-contenedor border-2 border-bear-olive-400 rounded-xl transition-all ${checked ? 'opacity-60' : ''}">
+                        <input type="checkbox" ${checked ? 'checked' : ''}
+                            class="w-5 h-5 rounded-lg border-2 border-bear-olive-500 text-bear-olive-700 focus:ring-2 focus:ring-bear-olive-500 focus:ring-offset-0 cursor-pointer shrink-0"
+                            onchange="toggleChecklistItem(${index}); this.closest('.flex').classList.toggle('opacity-60', this.checked); this.nextElementSibling.classList.toggle('line-through', this.checked); this.nextElementSibling.classList.toggle('opacity-60', this.checked);">
+                        <span class="flex-1 text-xs text-bear-textoOscuro font-medium select-none ${checked ? 'line-through opacity-60' : ''}">${item}</span>
+                        <button onclick="removeChecklistItem(${index})"
+                            class="${trashHidden} text-rose-400/60 hover:text-rose-300 text-[10px] font-bold py-1 px-2 rounded-lg transition-all shrink-0">
+                            Eliminar
+                        </button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // --- HISTORY MODAL (SLIDE OVERLAY) ---
+        function openHistoryModal() {
+            const modal = document.getElementById('history-modal');
+            const list = document.getElementById('modal-history-list');
+
+            if (guardsArray.length === 0) {
+                list.innerHTML = `
+                    <div class="py-12 text-center text-white/60 text-xs">
+                        <i data-lucide="clipboard" class="w-8 h-8 mx-auto mb-2 text-white/40"></i>
+                        <p>No hay guardias registradas en este dispositivo.</p>
+                    </div>
+                `;
+            } else {
+                let html = '';
+                guardsArray.forEach(guard => {
+                    const shortDate = guard.date.split('-').reverse().slice(0, 2).join('/');
+                    html += `
+                        <div onclick="openGuardDetails('${guard.id}')"
+                             class="bg-bear-olive-500 hover:bg-bear-olive-600 border-2 border-bear-olive-700 p-3 rounded-2xl flex justify-between items-center cursor-pointer transition-all shadow-md">
+                            <div class="flex-1 min-w-0 pr-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-white text-xs">${guard.weekday}, ${shortDate}</span>
+                                    <span class="text-[9px] font-mono text-white/70">${guard.startTime} - ${guard.endTime}</span>
+                                </div>
+                                <div class="text-[10px] text-white/60 mt-1 truncate">Oficial: ${guard.boss}</div>
+                            </div>
+                            <button onclick="deleteHistoryRecord('${guard.id}', event)" class="text-[9px] text-white/60 hover:text-rose-300 font-bold py-1 px-2 rounded-lg">
+                                Eliminar
+                            </button>
+                        </div>
+                     `;
+                });
+                list.innerHTML = html;
+            }
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('history-modal').classList.add('hidden');
+        }
+
+        function deleteHistoryRecord(id, event) {
+            event.stopPropagation();
+            if (confirm("¿Eliminar este registro de guardia?")) {
+                guardsArray = guardsArray.filter(g => g.id !== id);
+                localStorage.setItem('bear_historial_guardias', JSON.stringify(guardsArray));
+                showToast("Registro eliminado", "info");
+                renderGuardHistoryView();
+                if (!document.getElementById('history-modal').classList.contains('hidden')) {
+                    openHistoryModal();
+                }
+            }
+        }
+
+        // --- VISOR DE DETALLES DE GUARDIA ---
+        function openGuardDetails(id) {
+            const guard = guardsArray.find(g => g.id === id);
+            if (!guard) return;
+
+            document.getElementById('modal-date').innerText = `${guard.weekday}, ${guard.date}`;
+            document.getElementById('modal-hours').innerText = `${guard.startTime} hs - ${guard.endTime} hs`;
+            document.getElementById('modal-boss').innerText = guard.boss;
+            document.getElementById('modal-safety').innerText = guard.safetyBoss;
+            document.getElementById('modal-comms').innerText = guard.commsBoss;
+            document.getElementById('modal-crew').innerText = guard.crew;
+            document.getElementById('modal-incidents').innerText = guard.incidents;
+
+            // WhatsApp Exporter
+            const btnWhatsapp = document.getElementById('modal-btn-export-whatsapp');
+            btnWhatsapp.onclick = () => {
+                const text = `*REPORTE DE GUARDIA - BEAR*\n` +
+                    `-----------------------------------------\n` +
+                    `*Fecha:* ${guard.weekday}, ${guard.date}\n` +
+                    `*Horario:* ${guard.startTime} hs - ${guard.endTime} hs\n` +
+                    `*Jefe de Guardia:* ${guard.boss}\n` +
+                    `*Jefe de Seguridad:* ${guard.safetyBoss}\n` +
+                    `*Jefe de Comunicaciones:* ${guard.commsBoss}\n\n` +
+                    `*Personal:*\n${guard.crew}\n\n` +
+                    `*Novedades / Bitácora:*\n${guard.incidents}\n` +
+                    `-----------------------------------------\n` +
+                    `_Generado por Portal Móvil BEAR_`;
+
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("Formato copiado. ¡Listo para pegar en WhatsApp!", "info");
+                }).catch(() => {
+                    showToast("Error al copiar texto", "error");
+                });
+            };
+
+            const detailsModal = document.getElementById('view-modal');
+            detailsModal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeGuardModal() {
+            document.getElementById('view-modal').classList.add('hidden');
+        }
+
+
+        // ========================================================
+        // BIBLIOTECA QAP (LISTADO DE CÓDIGOS & ESTUDIO)
+        // ========================================================
+
+        function renderQapList(list) {
+            const container = document.getElementById('qap-mobile-list');
+
+            if (list.length === 0) {
+                container.innerHTML = '';
+                document.getElementById('qap-no-results').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('qap-no-results').classList.add('hidden');
+
+            let html = '';
+            list.forEach(item => {
+                html += `
+                    <div class="flex items-start gap-4 p-4 bg-bear-olive-800/40 border border-bear-olive-700/50 rounded-xl">
+                        <span class="text-lg font-bold text-bear-olive-200 font-mono shrink-0 min-w-[3.5rem]">${item.code}</span>
+                        <p class="text-sm text-bear-olive-300 leading-relaxed">${item.meaning}</p>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterQapCodes() {
+            const query = document.getElementById('qap-search').value.toLowerCase().trim();
+            const btnClear = document.getElementById('btn-clear-search');
+
+            if (query !== '') {
+                btnClear.classList.remove('hidden');
+            } else {
+                btnClear.classList.add('hidden');
+            }
+
+            let filteredList = QAP_DATABASE;
+            if (query !== '') {
+                filteredList = QAP_DATABASE.filter(item =>
+                    item.code.toLowerCase().includes(query) ||
+                    item.meaning.toLowerCase().includes(query)
+                );
+            }
+
+            renderQapList(filteredList);
+        }
+
+        function clearQapSearch() {
+            document.getElementById('qap-search').value = '';
+            document.getElementById('btn-clear-search').classList.add('hidden');
+            renderQapList(QAP_DATABASE);
+        }
+
+
+    </script>
+</body>
+
+</html>
